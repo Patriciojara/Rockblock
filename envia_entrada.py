@@ -32,15 +32,13 @@ def get_signal(ser):
 with serial.Serial(PORT, BAUD, timeout=1) as ser:
     print("\n--- RockBLOCK Prueba de Envío con hora ---\n")
     send('ATE0', ser)   # desactivar eco
-    #time.sleep(0.5)
     send('AT', ser)
-    time.sleep(0.5)
     # Esperar buena señal (>=2)
     print("\U0001f4e1 Buscando señal Iridium...")
+    
     csq = 0
     mensaje_entrada = sys.argv[1]
     print(f'📤 Mensaje entrada {mensaje_entrada}')
-    time.sleep(0.5)
 
     for _ in range(20):   # intenta 20 veces (≈20 s)
         csq = get_signal(ser)
@@ -50,12 +48,12 @@ with serial.Serial(PORT, BAUD, timeout=1) as ser:
         time.sleep(1)
 
     if csq < 2:
-        print("❌ Señal insuficiente, no se intentará enviar.")
+        print("\u2716 Señal insuficiente, no se intentará enviar.")
     else:
         # Construir mensaje con hora local
         hora = datetime.now().strftime("%H:%M:%S")
         mensaje_entrada = sys.argv[1]
-        print(f'📤 {hora} Mensaje entrada {mensaje_entrada}')
+        print(f'\u2709 {hora} Mensaje entrada {mensaje_entrada}')
         
         # Cargar mensaje
         send(f'AT+SBDWT={mensaje_entrada}', ser)
@@ -66,8 +64,8 @@ with serial.Serial(PORT, BAUD, timeout=1) as ser:
         if '+SBDIX:' in resp:
             cod = resp.split(':')[1].split(',')[0].strip()
             if cod == '0':
-                print("✅ Mensaje enviado correctamente al satélite.")
+                print("\u2714 Mensaje enviado correctamente al satélite.")
             else:
-                print(f"⚠️ Error de envío (código {cod}). Revisa señal o plan.")
+                print(f"\u26A0 Error de envío (código {cod}). Revisa señal o plan.")
         else:
-            print("⚠️ No se detectó respuesta válida de SBDIX.")
+            print("\u26A0 No se detectó respuesta válida de SBDIX.")
