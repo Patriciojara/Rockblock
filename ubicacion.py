@@ -10,7 +10,7 @@ altitud = read_csv['altitud'][0]
 velocidad = read_csv['velocidad'][0]
 
 
-mensaje = "Latitud: {}, Longitud: {}, Altitud: {} m, Velocidad: {} km/h".format(latitud, longitud, altitud, velocidad)
+mensaje = "La: {}, Lo: {}, A: {2:.2} m, Vel: {:.2f} km/h".format(latitud, longitud, altitud, velocidad)
 
 ubicacion = subprocess.Popen(["python3", "envia_entrada.py", mensaje], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
 
