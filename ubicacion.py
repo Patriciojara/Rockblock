@@ -12,10 +12,12 @@ velocidad = read_csv['velocidad'][0]
 
 mensaje = "Latitud: {}, Longitud: {}, Altitud: {} m, Velocidad: {} km/h".format(latitud, longitud, altitud, velocidad)
 
-ubicacion = subprocess.run(["python3", "envia_entrada.py", mensaje],capture_output=True, text=True)
+ubicacion = subprocess.Popen(["python3", "envia_entrada.py", mensaje], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
 
-print("Salida del script:")
-print(ubicacion.stdout)
+# Mostrar salida en tiempo real
+for line in ubicacion.stdout:
+    print(line, end='')
 
-print("Errores (si hubo):")
-print(ubicacion.stderr)
+# Mostrar errores en tiempo real
+for err in ubicacion.stderr:
+    print(err, end='')
