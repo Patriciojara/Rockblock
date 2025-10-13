@@ -51,14 +51,11 @@ with serial.Serial(PORT, BAUD, timeout=1) as ser:
     else:
         # Construir mensaje con hora local
         hora = datetime.now().strftime("%H:%M:%S")
-        contador = 1  # puedes incrementar en un bucle si quieres mandar varios
-        mensaje = f"{hora}: Saludos desde SUCHAI-Flight-Sofware, lat:-21.00938,lon: -70.1234493."
         mensaje_entrada = sys.argv[1]
-        print(f'Mensaje entrada {mensaje_entrada}.')
-        print(f"📤 Enviando: {mensaje}")
+        print(f'📤 {hora} Mensaje entrada {mensaje_entrada}')
+        
         # Cargar mensaje
         send(f'AT+SBDWT={mensaje_entrada}', ser)
-
         # Ejecutar sesión SBD
         resp = send('AT+SBDIX', ser, wait=12)  # espera más para el enlace
 
