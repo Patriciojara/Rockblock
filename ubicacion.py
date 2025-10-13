@@ -11,7 +11,7 @@ altitud = read_csv['altitud'].iloc[-1]
 velocidad = read_csv['velocidad'].iloc[-1]
 
 
-mensaje = "Da:{}, La: {}, Lo: {}, A: {2:.2} m, Vel: {:.2f} km/h".format(date, latitud, longitud, altitud, velocidad)
+mensaje = "Da:{}, La: {}, Lo: {}, A: {:.2} m, Vel: {:.2f} km/h".format(date, float(latitud), longitud, float(altitud), float(velocidad))
 
 ubicacion = subprocess.Popen(["python3", "envia_entrada.py", mensaje], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
 
