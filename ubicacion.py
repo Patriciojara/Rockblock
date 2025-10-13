@@ -4,13 +4,14 @@ import csv
 
 read_csv = pd.read_csv('ubicacion.csv')
 
-latitud = read_csv['latitud'][0]
-longitud = read_csv['longitud'][0]
-altitud = read_csv['altitud'][0]
-velocidad = read_csv['velocidad'][0]
+date = read_csv['date'].iloc[-1]
+latitud = read_csv['latitud'].iloc[-1]
+longitud = read_csv['longitud'].iloc[-1]
+altitud = read_csv['altitud'].iloc[-1]
+velocidad = read_csv['velocidad'].iloc[-1]
 
 
-mensaje = "La: {}, Lo: {}, A: {2:.2} m, Vel: {:.2f} km/h".format(latitud, longitud, altitud, velocidad)
+mensaje = "Da:{}, La: {}, Lo: {}, A: {2:.2} m, Vel: {:.2f} km/h".format(date, latitud, longitud, altitud, velocidad)
 
 ubicacion = subprocess.Popen(["python3", "envia_entrada.py", mensaje], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
 
