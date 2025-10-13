@@ -35,7 +35,7 @@ with serial.Serial(PORT, BAUD, timeout=1) as ser:
     send('AT', ser)
 
     # Esperar buena señal (>=2)
-    print("Buscando señal Iridium...")
+    print("\U+1f4e1 Buscando señal Iridium...")
     csq = 0
 
     for _ in range(20):   # intenta 20 veces (≈20 s)
