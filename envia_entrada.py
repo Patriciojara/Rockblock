@@ -37,7 +37,7 @@ with serial.Serial(PORT, BAUD, timeout=1) as ser:
     # Esperar buena señal (>=2)
     print("Buscando señal Iridium...")
     csq = 0
-    mensaje_entrada = sys.argv
+    mensaje_entrada = sys.argv[1]
     print(f'Mensaje entrada {mensaje_entrada}.')
     for _ in range(20):   # intenta 20 veces (≈20 s)
         csq = get_signal(ser)
@@ -53,7 +53,7 @@ with serial.Serial(PORT, BAUD, timeout=1) as ser:
         hora = datetime.now().strftime("%H:%M:%S")
         contador = 1  # puedes incrementar en un bucle si quieres mandar varios
         mensaje = f"{hora}: Saludos desde SUCHAI-Flight-Sofware, lat:-21.00938,lon: -70.1234493."
-        mensaje_entrada = sys.argv
+        mensaje_entrada = sys.argv[1]
         print(f'Mensaje entrada {mensaje_entrada}.')
         print(f"📤 Enviando: {mensaje}")
         # Cargar mensaje
