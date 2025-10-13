@@ -37,7 +37,8 @@ with serial.Serial(PORT, BAUD, timeout=1) as ser:
     # Esperar buena señal (>=2)
     print("\U0001f4e1 Buscando señal Iridium...")
     csq = 0
-
+    mensaje_entrada = sys.argv[1]
+    print(f'📤 Mensaje entrada {mensaje_entrada}')
     for _ in range(20):   # intenta 20 veces (≈20 s)
         csq = get_signal(ser)
         print(f"Nivel de señal: {csq}")
