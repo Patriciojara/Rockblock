@@ -32,8 +32,9 @@ def get_signal(ser):
 with serial.Serial(PORT, BAUD, timeout=1) as ser:
     print("\n--- RockBLOCK Prueba de Envío con hora ---\n")
     send('ATE0', ser)   # desactivar eco
+    time.sleep(0.5)
     send('AT', ser)
-
+    time.sleep(0.5)
     # Esperar buena señal (>=2)
     print("\U0001f4e1 Buscando señal Iridium...")
     csq = 0
