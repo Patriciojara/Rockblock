@@ -7,7 +7,7 @@ PORT = '/dev/serial0'   # cambia si usas otro puerto
 BAUD = 19200
 
 # === FUNCIONES AUXILIARES ===
-def send(cmd, ser, wait=0.5):
+def send(cmd, ser, wait=1):
     """Envía comando AT y devuelve respuesta limpia"""
     if not cmd.endswith('\r'):
         cmd += '\r'
@@ -32,7 +32,7 @@ def get_signal(ser):
 with serial.Serial(PORT, BAUD, timeout=1) as ser:
     print("\n--- RockBLOCK Prueba de Envío con hora ---\n")
     send('ATE0', ser)   # desactivar eco
-    time.sleep(0.5)
+    #time.sleep(0.5)
     send('AT', ser)
     time.sleep(0.5)
     # Esperar buena señal (>=2)
@@ -40,6 +40,8 @@ with serial.Serial(PORT, BAUD, timeout=1) as ser:
     csq = 0
     mensaje_entrada = sys.argv[1]
     print(f'📤 Mensaje entrada {mensaje_entrada}')
+    time.sleep(0.5)
+
     for _ in range(20):   # intenta 20 veces (≈20 s)
         csq = get_signal(ser)
         print(f"Nivel de señal: {csq}")
