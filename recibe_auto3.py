@@ -61,7 +61,7 @@ with serial.Serial(PORT, BAUD, timeout=1) as ser:
         # Cargar mensaje para lectura
         resp = send('AT+SBDIX\r', ser, wait=30)  # Pregunta si hay mensajes
         mensaje = send('AT+SBDRT\r', ser, wait=1)  # Leer mensaje
-        lineas = mensaje
+        lineas = mensaje.splitlines()
         if len(lineas)>1:
             mensaje_filtrado = lineas[1].strip()
         else:
