@@ -48,27 +48,9 @@ pi.set_PWM_dutycycle(PIN_PWM, duty)
 print(f"PWM activado en el pin {PIN_PWM} con {frecuencia} Hz y {duty_percent:.1f}% duty cycle.")
 time.sleep(tiempo_seg)
 pi.set_PWM_dutycycle(PIN_PWM, 0)
-#pi.stop()
+pi.stop()
 print("PWM detenido.")
 
-
-
-
-
-
-
-
-
-
-
-
-    except KeyboardInterrupt:
-        print("Interrumpido con Ctrl+C")
-
-    finally:
-        pi.stop()
-        GPIO.cleanup()
-        print("GPIO liberado y pigpio detenido")
 
 #--------------------------- Lora-----------------------------------------------
 
