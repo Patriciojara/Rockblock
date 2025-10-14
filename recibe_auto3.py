@@ -7,7 +7,7 @@ PORT = '/dev/serial0'   # cambia si usas otro puerto
 BAUD = 19200
 
 # === FUNCIONES AUXILIARES ===
-def send(cmd, ser, wait=1):
+def send(cmd, ser, wait=2):
     """Envía comando AT y devuelve respuesta limpia"""
     #if not cmd.endswith('\r'):
     #    cmd += '\r'
@@ -43,7 +43,7 @@ with serial.Serial(PORT, BAUD, timeout=1) as ser:
         print(f"Nivel de señal: {csq}")
         if csq >= 2:
             break
-        time.sleep(1)
+        time.sleep(2)
 
     if csq < 2:
         print("\u2716 Señal insuficiente, no se intentará recibir.")
