@@ -61,7 +61,12 @@ with serial.Serial(PORT, BAUD, timeout=1) as ser:
         # Cargar mensaje para lectura
         resp = send('AT+SBDIX\r', ser, wait=30)  # Pregunta si hay mensajes
         mensaje = send('AT+SBDRT\r', ser, wait=1)  # Leer mensaje
-        ubicacion = subprocess.Popen(["python3", "envia_entrada.py", f"Mensaje recibido acknwledgment: {mensaje}."], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+        lineas = mensaje
+        if len(lineas)>1:
+            mensaje_filtrado = lineas[1].strip()
+        else:
+            mensaje_filtrado = "Sin mensaje"
+        ubicacion = subprocess.Popen(["python3", "envia_entrada.py", f"Mensaje recibido acknwledgment: {mensaje_filtrado}."], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
         # Mostrar salida en tiempo real
         for line in ubicacion.stdout:
             print(line, end='')
