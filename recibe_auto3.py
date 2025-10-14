@@ -47,11 +47,10 @@ with serial.Serial(PORT, BAUD, timeout=1) as ser:
 
     if csq < 2:
         print("\u2716 Señal insuficiente, no se intentará enviar.")
-        
+
     else:
-        print("\n--- RockBLOCK Prueba de Envío con hora ---\n")
-        send('ATE0', ser)   # desactivar eco
-        send('AT', ser)
+        print("\n--- RockBLOCK Prueba de Recibo ---\n")
+
         # Construir mensaje con hora local
         #hora = datetime.now().strftime("%H:%M:%S")
         #mensaje_entrada = sys.argv[1]
@@ -59,7 +58,7 @@ with serial.Serial(PORT, BAUD, timeout=1) as ser:
         send(f'AT&K0\r', ser, wait=2) # desactivar flow control
         # Cargar mensaje para lectura
         resp = send('AT+SBDIX\r', ser, wait=30)  # Pregunta si hay mensajes
-        send('AT+SBDRT\r', ser, wait=20)  # Leer mensaje
+        send('AT+SBDRT\r', ser, wait=1)  # Leer mensaje
         # Analizar resultado
         if '+SBDIX:' in resp:
             cod = resp.split(':')[1].split(',')[0].strip()
