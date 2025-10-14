@@ -7,7 +7,7 @@ PORT = '/dev/serial0'   # cambia si usas otro puerto
 BAUD = 19200
 
 # === FUNCIONES AUXILIARES ===
-def send(cmd, ser, wait=2):
+def send(cmd, ser, wait=5):
     """Envía comando AT y devuelve respuesta limpia"""
     #if not cmd.endswith('\r'):
     #    cmd += '\r'
