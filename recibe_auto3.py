@@ -55,7 +55,7 @@ with serial.Serial(PORT, BAUD, timeout=1) as ser:
         #hora = datetime.now().strftime("%H:%M:%S")
         #mensaje_entrada = sys.argv[1]
         #print(f'\u2709 {hora} Mensaje entrada {mensaje_entrada}')
-        send(f'AT&K0\r', ser, wait=2) # desactivar flow control
+        #send(f'AT&K0\r', ser, wait=2) # desactivar flow control
         # Cargar mensaje para lectura
         resp = send('AT+SBDIX\r', ser, wait=30)  # Pregunta si hay mensajes
         send('AT+SBDRT\r', ser, wait=20)  # Leer mensaje
