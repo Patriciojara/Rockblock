@@ -7,10 +7,10 @@ PORT = '/dev/serial0'   # cambia si usas otro puerto
 BAUD = 19200
 
 # === FUNCIONES AUXILIARES ===
-def send(cmd, ser, wait=5):
+def send(cmd, ser, wait=1):
     """Envía comando AT y devuelve respuesta limpia"""
-    #if not cmd.endswith('\r'):
-    #    cmd += '\r'
+    if not cmd.endswith('\r'):
+        cmd += '\r'
     ser.reset_input_buffer()
     ser.write(cmd.encode('ascii'))
     time.sleep(wait)
@@ -30,7 +30,7 @@ def get_signal(ser):
 
 # === PROGRAMA PRINCIPAL ===
 with serial.Serial(PORT, BAUD, timeout=1) as ser:
-    print("\n--- RockBLOCK Prueba de Recibo ---\n")
+    print("\n--- RockBLOCK Prueba de Envío con hora ---\n")
     send('ATE0', ser)   # desactivar eco
     send('AT', ser)
     # Esperar buena señal (>=2)
@@ -43,10 +43,11 @@ with serial.Serial(PORT, BAUD, timeout=1) as ser:
         print(f"Nivel de señal: {csq}")
         if csq >= 2:
             break
-        time.sleep(2)
+        time.sleep(1)
 
     if csq < 2:
-        print("\u2716 Señal insuficiente, no se intentará recibir.")
+        print("\u2716 Señal insuficiente, no se intentará enviar.")
+        
     else:
         print("\n--- RockBLOCK Prueba de Envío con hora ---\n")
         send('ATE0', ser)   # desactivar eco
@@ -55,7 +56,7 @@ with serial.Serial(PORT, BAUD, timeout=1) as ser:
         #hora = datetime.now().strftime("%H:%M:%S")
         #mensaje_entrada = sys.argv[1]
         #print(f'\u2709 {hora} Mensaje entrada {mensaje_entrada}')
-        #send(f'AT&K0\r', ser, wait=2) # desactivar flow control
+        send(f'AT&K0\r', ser, wait=2) # desactivar flow control
         # Cargar mensaje para lectura
         resp = send('AT+SBDIX\r', ser, wait=30)  # Pregunta si hay mensajes
         send('AT+SBDRT\r', ser, wait=20)  # Leer mensaje
