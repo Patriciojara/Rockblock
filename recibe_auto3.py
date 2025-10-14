@@ -1,6 +1,8 @@
 import serial, time
 import sys
 from datetime import datetime
+import subprocess
+
 
 # === CONFIGURACIÓN SERIAL ===
 PORT = '/dev/serial0'   # cambia si usas otro puerto
@@ -58,7 +60,9 @@ with serial.Serial(PORT, BAUD, timeout=1) as ser:
         send(f'AT&K0\r', ser, wait=2) # desactivar flow control
         # Cargar mensaje para lectura
         resp = send('AT+SBDIX\r', ser, wait=30)  # Pregunta si hay mensajes
-        send('AT+SBDRT\r', ser, wait=1)  # Leer mensaje
+        mensaje = send('AT+SBDRT\r', ser, wait=1)  # Leer mensaje
+        ubicacion = subprocess.Popen(["python3", "envia_entrada.py", f"Mensaje recibido: {mensaje}"], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+
         # Analizar resultado
         if '+SBDIX:' in resp:
             cod = resp.split(':')[1].split(',')[0].strip()
