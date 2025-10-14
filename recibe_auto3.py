@@ -30,7 +30,7 @@ def get_signal(ser):
 
 # === PROGRAMA PRINCIPAL ===
 with serial.Serial(PORT, BAUD, timeout=1) as ser:
-    print("\n--- RockBLOCK Prueba de Envío con hora ---\n")
+    print("\n--- RockBLOCK Prueba de Recibo ---\n")
     send('ATE0', ser)   # desactivar eco
     send('AT', ser)
     # Esperar buena señal (>=2)
@@ -49,7 +49,7 @@ with serial.Serial(PORT, BAUD, timeout=1) as ser:
         print("\u2716 Señal insuficiente, no se intentará enviar.")
 
     else:
-        print("\n--- RockBLOCK Prueba de Recibo ---\n")
+        print("\n--- RockBLOCK Enviando Comando... ---\n")
 
         # Construir mensaje con hora local
         #hora = datetime.now().strftime("%H:%M:%S")
