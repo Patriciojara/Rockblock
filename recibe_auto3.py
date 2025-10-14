@@ -48,6 +48,9 @@ with serial.Serial(PORT, BAUD, timeout=1) as ser:
     if csq < 2:
         print("\u2716 Señal insuficiente, no se intentará recibir.")
     else:
+        print("\n--- RockBLOCK Prueba de Envío con hora ---\n")
+        send('ATE0', ser)   # desactivar eco
+        send('AT', ser)
         # Construir mensaje con hora local
         #hora = datetime.now().strftime("%H:%M:%S")
         #mensaje_entrada = sys.argv[1]
