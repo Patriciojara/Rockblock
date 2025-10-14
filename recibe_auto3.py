@@ -61,8 +61,14 @@ with serial.Serial(PORT, BAUD, timeout=1) as ser:
         # Cargar mensaje para lectura
         resp = send('AT+SBDIX\r', ser, wait=30)  # Pregunta si hay mensajes
         mensaje = send('AT+SBDRT\r', ser, wait=1)  # Leer mensaje
-        ubicacion = subprocess.Popen(["python3", "envia_entrada.py", f"Mensaje recibido: {mensaje}"], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+        ubicacion = subprocess.Popen(["python3", "envia_entrada.py", f"Mensaje recibido acknwledgment: {mensaje}."], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+        # Mostrar salida en tiempo real
+        for line in ubicacion.stdout:
+            print(line, end='')
 
+        # Mostrar errores en tiempo real
+        for err in ubicacion.stderr:
+            print(err, end='')
         # Analizar resultado
         if '+SBDIX:' in resp:
             cod = resp.split(':')[1].split(',')[0].strip()
