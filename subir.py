@@ -33,9 +33,9 @@ GPIO.setup(RESET_PIN, GPIO.OUT, initial=GPIO.HIGH)
 
 
 # Configuramos Pin
-PIN_PWM = 12  # Puedes cambiar este pin
-frecuencia = 1
-duty_percent=100
+PIN_PWM = 18  # Puedes cambiar este pin
+frecuencia = 25
+duty_percent=50
 tiempo_seg=12
 duty = int((duty_percent / 100) * 255)
 
