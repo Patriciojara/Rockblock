@@ -69,7 +69,10 @@ with serial.Serial(PORT, BAUD, timeout=1) as ser:
         print("Comenzando a: {mensaje_filtrado}...")
         if mensaje_filtrado == "bajar":
             subprocess.Popen(["python3", "open.py"], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-
+        if mensaje_filtrado == "subir":
+            subprocess.Popen(["python3", "subir.py"], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+        if mensaje_filtrado == "ubicacion":
+            subprocess.Popen(["python3", "ubicacion.py"], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
         ubicacion = subprocess.Popen(["python3", "envia_entrada.py", f"Mensaje recibido acknwledgment: {mensaje_filtrado}."], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
         # Mostrar salida en tiempo real
         for line in ubicacion.stdout:
