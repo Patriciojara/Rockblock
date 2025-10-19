@@ -3,7 +3,7 @@
 # Descripción: lee bmp y abre valvula segun velocidad de altura
 
 
-
+import numpy as np
 import time
 import board
 import busio
@@ -21,10 +21,11 @@ bme280.sea_level_pressure = 1013.25
 # Leemos la altitud y calculamos la velocidad de ascenso
 ventana = 100
 altura = []
-for _ in range():
+for _ in range(ventana):
     altura.append(bme280.altitude)
 
     time.sleep(0.1)
 print("Ventana ok")
+print(np.mean(altura))
 
 
