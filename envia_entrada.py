@@ -1,3 +1,8 @@
+# Autor: Patricio Jara Quiroz
+# Fecha: 08-10-2025
+# Descripción: envia por Rockblock. Ejemplo de envio de mensaje en consola:
+# python3 envia_entrada.py mensaje.
+
 import serial, time
 import sys
 from datetime import datetime

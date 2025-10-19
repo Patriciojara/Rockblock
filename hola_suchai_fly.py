@@ -1,3 +1,7 @@
+# Autor: Patricio Jara Quiroz
+# Fecha: 08-10-2025
+# Descripción: hola desde sofware de vuelo SUCHAI.
+
 import serial, time
 from datetime import datetime
 

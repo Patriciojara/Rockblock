@@ -1,3 +1,7 @@
+# Autor: Patricio Jara Quiroz
+# Fecha: 08-10-2025
+# Descripción: Envio de mensaje con hora local y datos GPS simulados.
+
 import serial, time
 from datetime import datetime
 

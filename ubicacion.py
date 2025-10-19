@@ -1,3 +1,7 @@
+# Autor: Patricio Jara Quiroz
+# Fecha: 08-10-2025
+# Descripción: lee y envia a ubicacion del gps por Rockblock.
+
 import subprocess
 import pandas as pd
 import csv

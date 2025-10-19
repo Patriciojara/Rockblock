@@ -1,3 +1,7 @@
+# Autor: Patricio Jara Quiroz
+# Fecha: 08-10-2025
+# Descripción: Activa subida de Radiosonda.
+
 import pigpio
 import time
 import subprocess

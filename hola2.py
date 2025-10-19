@@ -1,3 +1,6 @@
+# Autor: Patricio Jara Quiroz
+# Fecha: 08-10-2025
+# Descripción: Test de envio optimizado.
 import serial, time
 
 PORT = '/dev/serial0'

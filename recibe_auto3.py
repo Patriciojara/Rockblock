@@ -1,3 +1,7 @@
+# Autor: Patricio Jara Quiroz
+# Fecha: 08-10-2025
+# Descripción: Recibe actua y confima mensajes por Rockblock.
+
 import serial, time
 import sys
 from datetime import datetime
