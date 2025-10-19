@@ -1,5 +1,5 @@
 # Autor: Patricio Jara Quiroz
-# Fecha: 08-10-2025
+# Fecha: 18-10-2025
 # Descripción: lee bmp y rtc y envia por rockblock
 
 
@@ -71,6 +71,7 @@ while True:
     f"{t.tm_hour}:{t.tm_min:02}:{t.tm_sec:02}// "
     f"BMP: T: {bme280.temperature:.2f} C, P: {bme280.pressure:.2f} hPa, "
     f"H: {bme280.humidity:.2f} %, A: {bme280.altitude:.2f} m //"
+    f"GPS: Lat: {qwiicGPS.gnss_messages['Latitude']}, Lon: {qwiicGPS.gnss_messages['Longitude']}, Time: {qwiicGPS.gnss_messages['Time']}"
 )
     
 
