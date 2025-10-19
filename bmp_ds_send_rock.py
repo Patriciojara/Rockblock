@@ -70,10 +70,9 @@ while True:
         f"{t.tm_hour}:{t.tm_min:02}:{t.tm_sec:02}//"
         f"BMP: Temperatura: {bme280.temperature:.2f} °C, Presión: {bme280.pressure:.2f} hPa, "
         f"Humedad: {bme280.humidity:.2f} %, Altitud: {bme280.altitude:.2f} m //"
-        f"GPS: La: -{qwiicGPS.gnss_messages['Latitude']}, Lo: -{qwiicGPS.gnss_messages['Longitude']} "
+        f"GPS: La: -{qwiicGPS.gnss_messages['Latitude']}, Lo: -{qwiicGPS.gnss_messages['Longitude']}, T: {qwiicGPS.gnss_messages['Time']} "
     )
     time.sleep(60)  # wait a second
-
 
 
 
