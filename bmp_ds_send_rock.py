@@ -14,6 +14,7 @@
 # for working with hardware vs. software I2C.
 
 import time
+import subprocess
 
 import board
 
@@ -71,7 +72,18 @@ while True:
     f"BMP: T: {bme280.temperature:.2f} °C, P: {bme280.pressure:.2f} hPa, "
     f"H: {bme280.humidity:.2f} %, A: {bme280.altitude:.2f} m //"
 )
-    print(mensaje)
+    
+
+    ubicacion = subprocess.Popen(["python3", "envia_entrada.py", mensaje], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+
+    # Mostrar salida en tiempo real
+    for line in ubicacion.stdout:
+        print(line, end='')
+
+    # Mostrar errores en tiempo real
+    for err in ubicacion.stderr:
+        print(err, end='')
+
     time.sleep(1)  # wait a second
 
 
