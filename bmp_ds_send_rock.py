@@ -25,6 +25,12 @@ import busio
 from adafruit_bme280.advanced import Adafruit_BME280_I2C
 
 
+
+from time import sleep
+import sys
+import qwiic_titan_gps
+
+
 i2c_ds3231 = board.I2C()  # uses board.SCL and board.SDA ds3231
 # i2c = board.STEMMA_I2C()  # For using the built-in STEMMA QT connector on a microcontroller
 rtc = adafruit_ds3231.DS3231(i2c_ds3231)
@@ -42,7 +48,17 @@ bme280 = Adafruit_BME280_I2C(i2c_bmp, address=0x76)
 # Establece la presión a nivel del mar (opcional, para altitud)
 bme280.sea_level_pressure = 1013.25
 
-# Bucle de lectura
+
+# Inicializa el GPS Qwiic Titan
+
+qwiicGPS = qwiic_titan_gps.QwiicTitanGps()
+
+if qwiicGPS.connected is False:
+    print("Could not connect to to the SparkFun GPS Unit. Double check that\
+            it's wired correctly.", file=sys.stderr)
+   
+
+qwiicGPS.begin()
 
 
 # Main loop:
@@ -50,9 +66,17 @@ while True:
     t = rtc.datetime
     # print(t)     # uncomment for debugging
     print(
-        f"Date RTC {days[int(t.tm_wday)]} {t.tm_mday}/{t.tm_mon}/{t.tm_year}/ "
-        f"{t.tm_hour}:{t.tm_min:02}:{t.tm_sec:02} "
+        f"RTC:{days[int(t.tm_wday)]} {t.tm_mday}/{t.tm_mon}/{t.tm_year}/ "
+        f"{t.tm_hour}:{t.tm_min:02}:{t.tm_sec:02}//"
         f"BMP: Temperatura: {bme280.temperature:.2f} °C, Presión: {bme280.pressure:.2f} hPa, "
-        f"Humedad: {bme280.humidity:.2f} %, Altitud: {bme280.altitude:.2f} m"
+        f"Humedad: {bme280.humidity:.2f} %, Altitud: {bme280.altitude:.2f} m //"
+        f"GPS: La: -{qwiicGPS.gnss_messages['Latitude']}, Lo: -{qwiicGPS.gnss_messages['Longitude']} "
     )
     time.sleep(60)  # wait a second
+
+
+
+
+
+
+
