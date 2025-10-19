@@ -68,11 +68,11 @@ while True:
     print(
         f"RTC:{days[int(t.tm_wday)]} {t.tm_mday}/{t.tm_mon}/{t.tm_year}/ "
         f"{t.tm_hour}:{t.tm_min:02}:{t.tm_sec:02}//"
-        f"BMP: Temperatura: {bme280.temperature:.2f} °C, Presión: {bme280.pressure:.2f} hPa, "
-        f"Humedad: {bme280.humidity:.2f} %, Altitud: {bme280.altitude:.2f} m //"
-        f"GPS: La: -{qwiicGPS.gnss_messages['Latitude']}, Lo: -{qwiicGPS.gnss_messages['Longitude']}, T: {qwiicGPS.gnss_messages['Time']} "
+        f"BMP: T: {bme280.temperature:.2f} °C, P: {bme280.pressure:.2f} hPa, "
+        f"H: {bme280.humidity:.2f} %, A: {bme280.altitude:.2f} m //"
+        f"GPS: La: -{qwiicGPS.gnss_messages['Latitude']}, Lo: -{qwiicGPS.gnss_messages['Longitude']} "
     )
-    time.sleep(60)  # wait a second
+    time.sleep(1)  # wait a second
 
 
 
