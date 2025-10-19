@@ -64,16 +64,20 @@ qwiicGPS.begin()
 
 # Main loop:
 while True:
-    t = rtc.datetime
-    # print(t)     # uncomment for debugging
-    mensaje = (
-    f"RTC:{days[int(t.tm_wday)]} {t.tm_mday}/{t.tm_mon}/{t.tm_year}/ "
-    f"{t.tm_hour}:{t.tm_min:02}:{t.tm_sec:02}// "
-    f"BMP: T: {bme280.temperature:.2f} C, P: {bme280.pressure:.2f} hPa, "
-    f"H: {bme280.humidity:.2f} %, A: {bme280.altitude:.2f} m //"
-    f"GPS: Lat: {qwiicGPS.gnss_messages['Latitude']}, Lon: {qwiicGPS.gnss_messages['Longitude']}, Time: {qwiicGPS.gnss_messages['Time']}"
+    if qwiicGPS.get_nmea_data() is True:
+
+        t = rtc.datetime
+        # print(t)     # uncomment for debugging
+        mensaje = (
+        f"RTC:{days[int(t.tm_wday)]} {t.tm_mday}/{t.tm_mon}/{t.tm_year}/ "
+        f"{t.tm_hour}:{t.tm_min:02}:{t.tm_sec:02}// "
+        f"BMP: T: {bme280.temperature:.2f} C, P: {bme280.pressure:.2f} hPa, "
+        f"H: {bme280.humidity:.2f} %, A: {bme280.altitude:.2f} m //"
+        f"GPS: La: -{qwiicGPS.gnss_messages['Latitude']}" 
+
 )
-    
+    else:
+        pass    
 
     ubicacion = subprocess.Popen(["python3", "envia_entrada.py", mensaje], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
 
