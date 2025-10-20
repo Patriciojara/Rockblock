@@ -12,7 +12,7 @@ import time
 import board
 import busio
 from adafruit_bme280.advanced import Adafruit_BME280_I2C
-from sklearn.linear_model import LinearRegression
+#from sklearn.linear_model import LinearRegression
 
 print(
 "Configurando sensores")
