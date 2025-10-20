@@ -2,6 +2,9 @@
 # Fecha: 18-10-2025
 # Descripción: lee bmp y abre valvula segun velocidad de altura
 
+print(
+"Importando librerias...")
+
 
 import adafruit_ds3231
 import numpy as np
@@ -11,7 +14,8 @@ import busio
 from adafruit_bme280.advanced import Adafruit_BME280_I2C
 from sklearn.linear_model import LinearRegression
 
-
+print(
+"Configurando sensores")
 # Inicializa el bus I2C
 i2c = busio.I2C(board.SCL, board.SDA)
 
@@ -38,6 +42,7 @@ days = ("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sun
 ventana = 3
 altura = []
 hora = []
+print("Leyendo altitud...")
 for _ in range(ventana):
     t = rtc.datetime
     time_rtc = f"{t.tm_hour}:{t.tm_min:02}:{t.tm_sec:02}"
@@ -48,7 +53,7 @@ for _ in range(ventana):
 print("Ventana ok")
 print(np.mean(altura))
 
-
+print("Calculando velocidad de ascenso...")
 
 
 
