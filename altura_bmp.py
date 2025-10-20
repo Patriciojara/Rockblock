@@ -47,13 +47,16 @@ altura = []
 hora = []
 print("Leyendo altitud...")
 for _ in range(ventana):
-    t = rtc.datetime
-    now = datetime.now()  # del sistema
+    #t = rtc.datetime
+    #now = datetime.now()  # del sistema
+    
     # time_rtc = f"{t.tm_hour}:{t.tm_min:02}:{t.tm_sec:02}" Hora del rtc
-    time_rtc_ms = f"{t.tm_hour:02}:{t.tm_min:02}:{t.tm_sec:02}.{int(now.microsecond/1000):03d}"
-    hora.append(time_rtc_ms)
+    # time_rtc_ms = f"{t.tm_hour:02}:{t.tm_min:02}:{t.tm_sec:02}.{int(now.microsecond/1000):03d}" Falla ya que retrocede los milisegundos
+    
+    time_system = datetime.now().strftime("%H:%M:%S.%f")[:-3]
+    hora.append(time_system)
     altura.append(bme280.altitude)
-    print(f"Hora RTC: {time_rtc_ms} - Altitud: {bme280.altitude:.2f} m")
+    print(f"Hora RTC: {time_system} - Altitud: {bme280.altitude:.2f} m")
     time.sleep(0.01)
 print("Ventana ok")
 print(np.mean(altura))
