@@ -33,7 +33,7 @@ days = ("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sun
 
 
 # Leemos la altitud y calculamos la velocidad de ascenso
-ventana = 2
+ventana = 3
 altura = []
 for _ in range(ventana):
     t = rtc.datetime
@@ -42,7 +42,7 @@ for _ in range(ventana):
     print(f"Hora RTC: {time_rtc} - Altitud: {bme280.altitude:.2f} m")
     time.sleep(1)
 print("Ventana ok")
-hora, altitud = altura[0:10]
+hora, altitud = altura[0:1]
 print(np.mean(altitud))
 
 
