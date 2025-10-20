@@ -35,7 +35,6 @@ bme280.sea_level_pressure = 1013.25
 i2c_ds3231 = board.I2C()  # uses board.SCL and board.SDA ds3231
 # i2c = board.STEMMA_I2C()  # For using the built-in STEMMA QT connector on a microcontroller
 rtc = adafruit_ds3231.DS3231(i2c_ds3231)
-now = datetime.now()  # del sistema
 
 # Lookup table for names of days (nicer printing).
 days = ("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday")
@@ -49,6 +48,7 @@ hora = []
 print("Leyendo altitud...")
 for _ in range(ventana):
     t = rtc.datetime
+    now = datetime.now()  # del sistema
     # time_rtc = f"{t.tm_hour}:{t.tm_min:02}:{t.tm_sec:02}" Hora del rtc
     time_rtc_ms = f"{t.tm_hour:02}:{t.tm_min:02}:{t.tm_sec:02}.{int(now.microsecond/1000):03d}"
     hora.append(time_rtc_ms)
