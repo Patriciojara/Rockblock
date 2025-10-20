@@ -57,7 +57,7 @@ for _ in range(ventana):
     hora.append(time_system)
     altura.append(bme280.altitude)
     print(f"Hora RTC: {time_system} - Altitud: {bme280.altitude:.2f} m")
-    time.sleep(0.01)
+    time.sleep(0.001)
 print("Ventana ok")
 print(np.mean(altura))
 
