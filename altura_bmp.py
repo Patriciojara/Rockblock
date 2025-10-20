@@ -5,7 +5,7 @@
 print(
 "Importando librerias...")
 
-
+import subprocess
 import adafruit_ds3231
 import numpy as np
 import time
@@ -57,7 +57,7 @@ for _ in range(ventana):
     hora.append(time_system)
     altura.append(bme280.altitude)
     print(f"Hora RTC: {time_system} - Altitud: {bme280.altitude:.2f} m")
-    time.sleep(0.001)
+    time.sleep(0.01)
 print("Ventana ok")
 print(np.mean(altura))
 
@@ -66,3 +66,6 @@ t = pd.to_datetime(hora)
 t_seg = (t - t[0]).total_seconds().to_numpy()
 m, b = np.polyfit(t_seg, altura, deg=1)
 print(f"Velocidad de ascenso: {m:.2f} m/s")
+if m >= 0.3:
+    print("Abriendo valvula...")
+    subprocess.Popen(["python3", "buzzer.py"], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
