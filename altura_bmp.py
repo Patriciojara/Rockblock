@@ -12,7 +12,7 @@ import time
 import board
 import busio
 from adafruit_bme280.advanced import Adafruit_BME280_I2C
-#from sklearn.linear_model import LinearRegression
+
 
 print(
 "Configurando sensores")
@@ -56,21 +56,5 @@ print(np.mean(altura))
 print("Calculando velocidad de ascenso...")
 
 
-
-# Sample data
-#x = np.array([1, 2, 3, 4, 5]).reshape(-1, 1)  # Reshape for scikit-learn
-#y = np.array([2, 4, 5, 4, 5])
-
-# Create model instance
-model = LinearRegression()
-
-# Fit the model
-model.fit(hora, altura)
-
-# Get model parameters
-print(f"Slope (B1): {model.coef_[0]}")
-print(f"Intercept (B0): {model.intercept_}")
-
-# Predict values
-y_pred = model.predict(x)
-print("Predicted values:", y_pred)
+m, b = np.polyfit(hora, altura, deg=1)
+print(f"Velocidad de ascenso: {m:.2f} m/s")
