@@ -42,7 +42,7 @@ days = ("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sun
 
 
 # Leemos la altitud y calculamos la velocidad de ascenso
-ventana = 10
+ventana = 3
 altura = []
 hora = []
 print("Leyendo altitud...")
@@ -69,7 +69,7 @@ while True:
     t_seg = (t - t[0]).total_seconds().to_numpy()
     m, b = np.polyfit(t_seg, altura, deg=1)
     print(f"Velocidad de ascenso: {m:.2f} m/s")
-    if m >= 0.03:
+    if m >= 0.1:
         print("Abriendo valvula...")
         subprocess.Popen(["python3", "buzzer.py"], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
     else: 
