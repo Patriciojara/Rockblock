@@ -70,7 +70,7 @@ while True:
     m, b = np.polyfit(t_seg, altura, deg=1)
     print(f"Velocidad de ascenso: {m:.2f} m/s")
     if m >= 0.5:
-        print("Abriendo valvula...")
+        print("🎈Abriendo valvula...🎈")
         subprocess.Popen(["python3", "buzzer.py"], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
     else: 
-        print("No se abre valvula.")
+        print("✅Velocidad de ascenso dentro de limites.")
