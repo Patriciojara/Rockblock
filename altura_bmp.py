@@ -54,7 +54,7 @@ print("Ventana ok")
 print(np.mean(altura))
 
 print("Calculando velocidad de ascenso...")
-
-
-m, b = np.polyfit(hora, altura, deg=1)
+t = hora
+t_seg = (t - t.iloc[0]).dt.total_seconds().to_numpy()
+m, b = np.polyfit(t_seg, altura, deg=1)
 print(f"Velocidad de ascenso: {m:.2f} m/s")
