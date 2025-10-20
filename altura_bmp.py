@@ -42,6 +42,7 @@ for _ in range(ventana):
     print(f"Hora RTC: {time_rtc} - Altitud: {bme280.altitude:.2f} m")
     time.sleep(1)
 print("Ventana ok")
-print(altura[:][1])
+hora, altitud = altura[0]
+print(hora)
 
 
