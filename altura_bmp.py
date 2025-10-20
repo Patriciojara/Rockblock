@@ -42,7 +42,7 @@ days = ("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sun
 
 
 # Leemos la altitud y calculamos la velocidad de ascenso
-ventana = 6
+ventana = 10
 altura = []
 hora = []
 print("Leyendo altitud...")
