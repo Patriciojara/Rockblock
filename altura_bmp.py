@@ -12,7 +12,7 @@ import time
 import board
 import busio
 from adafruit_bme280.advanced import Adafruit_BME280_I2C
-
+import pandas as pd
 
 print(
 "Configurando sensores")
@@ -54,7 +54,7 @@ print("Ventana ok")
 print(np.mean(altura))
 
 print("Calculando velocidad de ascenso...")
-t = hora
-t_seg = (t - t[0]).dt.total_seconds().to_numpy()
+t = pd.to_datetime(hora)
+t_seg = (t - t.iloc[0]).dt.total_seconds().to_numpy()
 m, b = np.polyfit(t_seg, altura, deg=1)
 print(f"Velocidad de ascenso: {m:.2f} m/s")
