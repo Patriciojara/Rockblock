@@ -35,6 +35,8 @@ bme280.sea_level_pressure = 1013.25
 i2c_ds3231 = board.I2C()  # uses board.SCL and board.SDA ds3231
 # i2c = board.STEMMA_I2C()  # For using the built-in STEMMA QT connector on a microcontroller
 rtc = adafruit_ds3231.DS3231(i2c_ds3231)
+now = datetime.now()  # del sistema
+
 # Lookup table for names of days (nicer printing).
 days = ("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday")
 
