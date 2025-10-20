@@ -13,6 +13,8 @@ import board
 import busio
 from adafruit_bme280.advanced import Adafruit_BME280_I2C
 import pandas as pd
+from datetime import datetime
+
 
 print(
 "Configurando sensores")
@@ -39,22 +41,23 @@ days = ("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sun
 
 
 # Leemos la altitud y calculamos la velocidad de ascenso
-ventana = 3
+ventana = 100
 altura = []
 hora = []
 print("Leyendo altitud...")
 for _ in range(ventana):
     t = rtc.datetime
-    time_rtc = f"{t.tm_hour}:{t.tm_min:02}:{t.tm_sec:02}"
-    hora.append(time_rtc)
+    # time_rtc = f"{t.tm_hour}:{t.tm_min:02}:{t.tm_sec:02}" Hora del rtc
+    time_rtc_ms = f"{t.tm_hour:02}:{t.tm_min:02}:{t.tm_sec:02}.{int(now.microsecond/1000):03d}"
+    hora.append(time_rtc_ms)
     altura.append(bme280.altitude)
-    print(f"Hora RTC: {time_rtc} - Altitud: {bme280.altitude:.2f} m")
-    time.sleep(1)
+    print(f"Hora RTC: {time_rtc_ms} - Altitud: {bme280.altitude:.2f} m")
+    time.sleep(0.01)
 print("Ventana ok")
 print(np.mean(altura))
 
 print("Calculando velocidad de ascenso...")
 t = pd.to_datetime(hora)
-t_seg = (t - t.iloc[0]).dt.total_seconds().to_numpy()
+t_seg = (t - t[0]).total_seconds().to_numpy()
 m, b = np.polyfit(t_seg, altura, deg=1)
 print(f"Velocidad de ascenso: {m:.2f} m/s")
