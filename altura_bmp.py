@@ -43,6 +43,6 @@ for _ in range(ventana):
     time.sleep(1)
 print("Ventana ok")
 hora, altitud = altura[0:1]
-print(np.mean(altitud))
+print(altitud)
 
 
