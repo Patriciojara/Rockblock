@@ -65,7 +65,7 @@ while True:
     with open(FILENAME, "a", newline="") as file:
 
         if qwiicGPS.get_nmea_data() is True:
-                Data = "1"
+                Data = str(1)
                 Latitud = qwiicGPS.gnss_messages['Latitude'],
                 Longitud = qwiicGPS.gnss_messages['Longitude'],
                 Hora_gps = qwiicGPS.gnss_messages['Time'] # Time will be UTC time as a list [hh, mm, ss]
