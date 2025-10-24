@@ -58,7 +58,7 @@ days = ("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sun
 # Bucle principal
 while True:
     # Simulación de lectura de datos del sensor (reemplaza por tus lecturas reales)
-
+    qwiicGPS.get_nmea_data()
     # Tiempo del rtc
 
     # Guardar en el CSV
