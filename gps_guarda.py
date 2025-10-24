@@ -59,16 +59,25 @@ while True:
     with open(FILENAME, "a", newline="") as file:
 
         if qwiicGPS.get_nmea_data() is True:
+                Data = "1"
                 Latitud = qwiicGPS.gnss_messages['Latitude'],
                 Longitud = qwiicGPS.gnss_messages['Longitude'],
                 Hora_gps = qwiicGPS.gnss_messages['Time'] # Time will be UTC time as a list [hh, mm, ss]
                 t = rtc.datetime
                 Hora_RTC =f"{days[int(t.tm_wday)]} {t.tm_mday}/{t.tm_mon}/{t.tm_year} {t.tm_hour}:{t.tm_min:02}:{t.tm_sec:02}"
-                writer = csv.writer(file)
-                writer.writerow([Hora_RTC, Hora_gps, Latitud, Longitud])
+                #writer = csv.writer(file)
+                writer.writerow([Hora_RTC, Hora_gps, Latitud, Longitud, Data])
                 print(f"{Hora_RTC}, {Hora_gps}, {Latitud}, {Longitud}")
                 sleep(1)
-    
+        else:
+                Data = "0"
+       
+                t = rtc.datetime
+                Hora_RTC =f"{days[int(t.tm_wday)]} {t.tm_mday}/{t.tm_mon}/{t.tm_year} {t.tm_hour}:{t.tm_min:02}:{t.tm_sec:02}"
+                #writer = csv.writer(file)
+                writer.writerow([Hora_RTC, 0, 0, 0, Data])
+                print(f"{Hora_RTC}, Error de lectura GPS")
+                sleep(1)
 
 
 
