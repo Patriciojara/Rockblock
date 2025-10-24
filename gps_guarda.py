@@ -64,7 +64,7 @@ while True:
     # Guardar en el CSV
     with open(FILENAME, "a", newline="") as file:
 
-        if qwiicGPS.get_nmea_data() is True:
+        #if qwiicGPS.get_nmea_data() is True:
                 Data = str(1)
                 Latitud = qwiicGPS.gnss_messages['Latitude'],
                 Longitud = qwiicGPS.gnss_messages['Longitude'],
@@ -75,6 +75,7 @@ while True:
                 writer.writerow([Hora_RTC, Hora_gps, Latitud, Longitud])
                 print(f"{Hora_RTC}, {Hora_gps}, {Latitud}, {Longitud}")
                 sleep(1)
+        """
         else:
                 Data = "0"
        
@@ -84,7 +85,7 @@ while True:
                 #writer.writerow([Hora_RTC, 0, 0, 0, Data])
                 print(f"{Hora_RTC}, Error de lectura GPS")
                 sleep(1)
-
+"""
 
 
 
