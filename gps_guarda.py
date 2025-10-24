@@ -2,6 +2,7 @@
 import csv
 import time
 from datetime import datetime
+import os
 
 # GPS
 from time import sleep
@@ -12,22 +13,27 @@ import qwiic_titan_gps
 import board
 import adafruit_ds3231
 # Nombre del archivo donde guardarás los datos
-FILENAME = "gps_guarda"
+name = "gps_guarda"
 
 # Encabezados del CSV
-HEADERS = ["Date_TRC", "Date_gps", "Latitud", "Longitud"]
+HEADERS = ["Date_TRC", "Date_GPS", "Latitud", "Longitud"]
 i=1
 # Si el archivo no existe, se crea con los encabezados
-try:
-    with open(f"{FILENAME}_{i}.csv", "x", newline="") as file:
-        writer = csv.writer(file)
-        writer.writerow(HEADERS)
-except FileExistsError: # Si existe el archivo creamos otro
-    i+=1
-    with open(f"{FILENAME}_{i}", "x", newline="") as file:
-        writer = csv.writer(file)
-        writer.writerow(HEADERS)
-    #pass # Ya existe, no hace falta volver a escribir los headers
+def generar_nombre_archivo(base_name):
+    contador = 1
+    while True:
+        filename = f"{base_name}_{contador}.csv"
+        if not os.path.exists(filename):
+            return filename
+        contador += 1
+
+# --- CREAR NUEVO ARCHIVO CON HEADERS ---
+FILENAME = generar_nombre_archivo(name)
+print(f"Creando archivo: {FILENAME}")
+
+with open(FILENAME, "w", newline="") as file:
+    writer = csv.writer(file)
+    writer.writerow(HEADERS)
 
 
 # Inicia al GPS
@@ -75,7 +81,7 @@ while True:
                 t = rtc.datetime
                 Hora_RTC =f"{days[int(t.tm_wday)]} {t.tm_mday}/{t.tm_mon}/{t.tm_year} {t.tm_hour}:{t.tm_min:02}:{t.tm_sec:02}"
                 #writer = csv.writer(file)
-                writer.writerow([Hora_RTC, 0, 0, 0, Data])
+                #writer.writerow([Hora_RTC, 0, 0, 0, Data])
                 print(f"{Hora_RTC}, Error de lectura GPS")
                 sleep(1)
 
