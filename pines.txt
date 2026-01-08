@@ -1,0 +1,5 @@
+pin 18 extractor. Activa salida 3 desde orilla raspbeery
+
+pin 12 primero desde orilla raspberry 
+pin 19 cuarto desde raspbeey
+pin 13 segundo desde raspbeey

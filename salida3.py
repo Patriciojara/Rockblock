@@ -2,13 +2,9 @@ import pigpio
 import time
 import subprocess
 #--------------------------- Lora-----------------------------------------------
-import serial
-import time
-import RPi.GPIO as GPIO
 
-SERIAL_PORT = "/dev/serial0"
-BAUDRATE = 115200
-RESET_PIN = 4
+import time
+
 
 subprocess.run("sudo pigpiod", shell=True)
 
@@ -18,24 +14,11 @@ pi = pigpio.pi()
 if not pi.connected:
     print("Error: no se pudo conectar con el daemon pigpiod. ¿Está corriendo?")
     exit(1)
-PIN_PWM = 18  # Puedes cambiar este pin
-frecuencia = 1
-duty_percent=100
-tiempo_seg=4
-duty = int((duty_percent / 100) * 255)
-# Fin Parametro valvula
-
-
-GPIO.setmode(GPIO.BCM)
-GPIO.setup(RESET_PIN, GPIO.OUT, initial=GPIO.HIGH)
-
-
-
 
 # Configuramos Pin
 PIN_PWM = 18  # Puedes cambiar este pin
 frecuencia = 1
-duty_percent=100
+duty_percent= 100
 tiempo_seg=12
 duty = int((duty_percent / 100) * 255)
 
