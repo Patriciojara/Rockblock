@@ -5,7 +5,7 @@ from subprocess import Popen
 #--------------------------- Lora-----------------------------------------------
 import serial
 import time
-#import RPi.GPIO as GPIO
+import RPi.GPIO as GPIO
 
 SERIAL_PORT = "/dev/serial0"
 BAUDRATE = 115200
