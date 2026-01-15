@@ -16,11 +16,20 @@ def run_example():
     qwiicGPS.begin()
 
     while True:
-        if qwiicGPS.get_nmea_data() is True:
-            print("Latitude: {}, Longitude: {}, Time: {}".format(
-                qwiicGPS.gnss_messages['Latitude'],
-                qwiicGPS.gnss_messages['Longitude'],
-                qwiicGPS.gnss_messages['Time'])) # Time will be UTC time as a list [hh, mm, ss]
+        try:
+            ok = qwiicGPS.get_nmea_data()
+        except Exception as e:
+            # Ignorar errores de parsing (p. ej. sentencias GPGSV malformadas)
+            print(f"[!] Error leyendo NMEA (ignorando): {e}")
+            sleep(0.5)
+            continue
+
+        if ok is True:
+            # usar .get para evitar KeyError si faltan campos
+            lat = qwiicGPS.gnss_messages.get('Latitude', 'N/A')
+            lon = qwiicGPS.gnss_messages.get('Longitude', 'N/A')
+            t = qwiicGPS.gnss_messages.get('Time', 'N/A')
+            print("Latitude: {}, Longitude: {}, Time: {}".format(lat, lon, t))
 
         sleep(1)
 
