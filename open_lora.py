@@ -19,6 +19,10 @@ RESET_PIN = 4
 
 
 
+
+GPIO.setmode(GPIO.BCM)
+GPIO.setup(RESET_PIN, GPIO.OUT, initial=GPIO.HIGH)
+
 def reset_lora():
     GPIO.output(RESET_PIN, GPIO.LOW)
     time.sleep(0.2)
