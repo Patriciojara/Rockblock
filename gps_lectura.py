@@ -54,8 +54,8 @@ def run_example():
 
             if ok is True:
                 # usar .get para evitar KeyError si faltan campos
-                lat = qwiicGPS.gnss_messages.get('Latitude', 'N/A')
-                lon = qwiicGPS.gnss_messages.get('Longitude', 'N/A')
+                lat = -qwiicGPS.gnss_messages.get('Latitude', 'N/A')
+                lon = -qwiicGPS.gnss_messages.get('Longitude', 'N/A')
                 t = qwiicGPS.gnss_messages.get('Time', 'N/A')
 
                 # Formatear tiempo si viene como lista [hh,mm,ss]
