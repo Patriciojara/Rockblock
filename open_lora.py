@@ -7,7 +7,7 @@ import serial
 import time
 import RPi.GPIO as GPIO
 
-SERIAL_PORT = "/dev/serial0"
+SERIAL_PORT = "/dev/ttyUSB0"
 BAUDRATE = 115200
 RESET_PIN = 4
 
