@@ -5,6 +5,8 @@ import os
 import csv
 import re
 import qwiic_titan_gps
+import subprocess
+
 
 def run_example():
 
@@ -70,6 +72,11 @@ def run_example():
                 print("Latitude: {}, Longitude: {}, Time: {}".format(lat, lon, time_str))
                 writer.writerow([time_str, lat, lon])
                 csvfile.flush()
+                
+                mensaje = "Da:{}, La: {}, Lo: {}".format(t, float(lat), lon)
+
+                ubicacion = subprocess.Popen(["python3", "envia_entrada.py", mensaje], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+
 
             sleep(1)
     finally:
