@@ -21,7 +21,27 @@ RESET_PIN = 4
 
 
 GPIO.setmode(GPIO.BCM)
-GPIO.setup(RESET_PIN, GPIO.OUT, initial=GPIO.HIGH)
+GPIO.setwarnings(False)
+
+# Intento de setup con reintentos: si un proceso anterior dejó el GPIO ocupado,
+# intentamos `cleanup()` y reintentar un par de veces antes de fallar con mensaje
+for attempt in range(3):
+    try:
+        GPIO.setup(RESET_PIN, GPIO.OUT, initial=GPIO.HIGH)
+        break
+    except Exception as e:
+        print(f"[!] GPIO setup intento {attempt+1} falló: {e}")
+        try:
+            GPIO.cleanup()
+        except Exception:
+            pass
+        time.sleep(1)
+else:
+    print("[!] No se pudo reclamar el GPIO. Comprueba procesos en ejecución que usen GPIO y reinicia o mátalos:")
+    print("    ps aux | grep python")
+    print("    pgrep -f pwm_gpio || pkill -f pwm_gpio")
+    print("    sudo reboot")
+    sys.exit(1)
 
 def reset_lora():
     GPIO.output(RESET_PIN, GPIO.LOW)
