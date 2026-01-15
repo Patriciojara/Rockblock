@@ -9,8 +9,8 @@ import time
 ser = serial.Serial('/dev/serial0', 19200, timeout=1)
 
 # Comando AT para verificar conexión
-ser.write(b'AT+SBDWT=mensaje_corto\r\n')  # Envía el comando AT para probar la comunicación
-time.sleep(1)  # Espera para que el módulo responda
+ser.write(b'AT+SBDRT\r\n')  # Envía el comando AT para probar la comunicación
+time.sleep(20)  # Espera para que el módulo responda
 
 # Leer la respuesta
 response = ser.read(100)  # Lee hasta 100 bytes

@@ -1,7 +1,3 @@
-# Autor: Patricio Jara Quiroz
-# Fecha: 08-10-2025
-# Descripción: Activa subida de Radiosonda.
-
 import pigpio
 import time
 import subprocess
@@ -22,7 +18,7 @@ pi = pigpio.pi()
 if not pi.connected:
     print("Error: no se pudo conectar con el daemon pigpiod. ¿Está corriendo?")
     exit(1)
-PIN_PWM = 18  # Puedes cambiar este pin
+PIN_PWM = 12  # Puedes cambiar este pin
 frecuencia = 1
 duty_percent=100
 tiempo_seg=4
@@ -37,7 +33,7 @@ GPIO.setup(RESET_PIN, GPIO.OUT, initial=GPIO.HIGH)
 
 
 # Configuramos Pin
-PIN_PWM = 18  # Puedes cambiar este pin
+PIN_PWM = 12  # Puedes cambiar este pin
 frecuencia = 1
 duty_percent=100
 tiempo_seg=12
