@@ -78,7 +78,7 @@ def run_example():
                 subprocess.Popen(["python3", "envia_entrada.py", mensaje], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
 
 
-            sleep(1)
+            sleep(120)
     finally:
         try:
             csvfile.close()
