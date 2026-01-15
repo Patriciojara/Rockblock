@@ -21,7 +21,7 @@ except Exception as e:
 
 PIN = 12  # BCM numbering (GPIO12), pin físico 32
 FREQ = 25  # Hz
-DUTY = 50  # %
+DUTY = 100  # %
 DURATION = 5  # segundos
 
 # objeto PWM global para que el handler de señales pueda detenerlo

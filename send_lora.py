@@ -1,0 +1,127 @@
+#!/usr/bin/env python3
+"""
+send_lora.py
+
+Envía comandos por serial al módulo LoRa en modo AT/TEST para que el receptor
+ejecute acciones (`up`, `open`, `rec`, `close`).
+
+Uso:
+    python3 send_lora.py --port /dev/ttyUSB0 open
+    python3 send_lora.py --port COM3 up
+
+Requiere: `pyserial` (instalar con `pip install pyserial`).
+"""
+import sys
+import argparse
+import time
+try:
+    import serial
+except Exception:
+    sys.exit("Instala pyserial: pip install pyserial")
+
+DEFAULT_PORT = 'COM7'
+DEFAULT_BAUD = 115200
+
+#!/usr/bin/env python3
+"""
+send_lora.py — emisor simple para módulo LoRa (AT+TEST)
+
+Uso:
+  - Directo: python send_lora.py open
+  - Interactivo (si ejecutas solo python send_lora.py): puerto preseleccionado COM7 en Windows
+
+Requiere: pyserial (`pip install pyserial`)
+"""
+import sys
+import time
+import argparse
+try:
+    import serial
+except Exception:
+    sys.exit("Instala pyserial: pip install pyserial")
+
+DEFAULT_PORT = '/dev/ttyUSB0' if sys.platform != 'win32' else 'COM7'
+DEFAULT_BAUD = 115200
+
+ALLOWED = {'up', 'open', 'rec', 'close'}
+
+def enviar_cmd(ser, cmd=None, delay=0.2, read_timeout=1.0):
+    """Enviar una línea (si cmd) y leer respuesta disponible."""
+    if cmd:
+        ser.write((cmd + "\r\n").encode())
+    time.sleep(delay)
+    ser.timeout = read_timeout
+    out = []
+    try:
+        while True:
+            line = ser.readline()
+            if not line:
+                break
+            try:
+                text = line.decode(errors='ignore').strip()
+            except Exception:
+                text = repr(line)
+            if text:
+                print("<-", text)
+                out.append(text)
+    except Exception as e:
+        print("[!] Error leyendo serial:", e)
+    return out
+
+def main():
+    p = argparse.ArgumentParser(description='Enviar comandos por LoRa (módulo AT)')
+    p.add_argument('command', nargs='?', choices=sorted(ALLOWED), help='Comando a enviar (opcional)')
+    p.add_argument('--port', '-p', default=DEFAULT_PORT, help='Puerto serial (ej: /dev/ttyUSB0 o COM3) o número de puerto (7)')
+    p.add_argument('--baud', '-b', type=int, default=DEFAULT_BAUD)
+    p.add_argument('--wait-ack', action='store_true', help='Esperar ACK/respuesta del receptor')
+    args = p.parse_args()
+
+    cmd = args.command
+
+    # modo interactivo si no se pasó comando
+    port_arg = args.port
+    if cmd is None:
+        print("Modo interactivo — puerto preseleccionado:", DEFAULT_PORT)
+        port_input = input(f"Puerto [{DEFAULT_PORT}]: ").strip()
+        port_arg = port_input or DEFAULT_PORT
+        if port_arg.isdigit() and sys.platform == 'win32':
+            port_arg = f"COM{port_arg}"
+        cmds = "/".join(sorted(ALLOWED))
+        cmd_input = input(f"Comando ({cmds}) [open]: ").strip().lower()
+        cmd = cmd_input or 'open'
+        if cmd not in ALLOWED:
+            print("Comando no válido.")
+            sys.exit(2)
+
+    # si pasaron número de puerto como argumento en Windows, convertir
+    if port_arg and port_arg.isdigit() and sys.platform == 'win32':
+        port_arg = f"COM{port_arg}"
+
+    try:
+        with serial.Serial(port_arg, args.baud, timeout=1) as ser:
+            print(f"Conectado a {port_arg} @ {args.baud}")
+            enviar_cmd(ser, "AT", delay=0.2)
+            enviar_cmd(ser, "AT+MODE=TEST", delay=0.2)
+
+            send = f'AT+TEST=TXLRSTR,"{cmd}"'
+            print(">", send)
+            enviar_cmd(ser, send, delay=0.3)
+
+            if args.wait_ack:
+                print("Esperando ACK (5s)...")
+                enviar_cmd(ser, "AT+TEST=RXLRPKT", delay=0.2)
+                t0 = time.time()
+                while time.time() - t0 < 5:
+                    lines = enviar_cmd(ser, None, delay=0.5, read_timeout=0.5)
+                    for l in lines:
+                        if 'ACK' in l or 'RX' in l:
+                            print("Respuesta recibida:", l)
+                            return
+                print("Tiempo de espera agotado.")
+
+    except serial.SerialException as e:
+        print(f"Error abriendo puerto serial {port_arg}: {e}")
+        sys.exit(2)
+
+if __name__ == '__main__':
+    main()

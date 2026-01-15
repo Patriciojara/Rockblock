@@ -54,7 +54,7 @@ reset_lora()
 
 def open(ser):
     # Activamos Pin PWM desde archivo python
-    p = Popen([sys.executable, "pwm_gpio19.py"])
+    p = Popen([sys.executable, "pwm_gpio18.py"])
     # Configuramos Pin
     
     enviar_cmd(ser, f'AT+TEST=TXLRSTR,"{"Activando valvula..."}"', delay=2)
