@@ -34,6 +34,22 @@ def _cleanup():
             pwm.stop()
     except Exception:
         pass
+    # Asegurarse de que el objeto PWM sea destruido (y su __del__ se ejecute)
+    # antes de llamar a GPIO.cleanup(). De lo contrario, durante el apagado
+    # del intérprete el __del__ puede ejecutarse después de cleanup y lanzar
+    # errores en la librería subyacente (lgpio).
+    try:
+        # eliminar referencia y forzar recolección para que __del__ corra ahora
+        del pwm
+    except Exception:
+        pwm = None
+    finally:
+        pwm = None
+    try:
+        import gc
+        gc.collect()
+    except Exception:
+        pass
     try:
         GPIO.cleanup()
     except Exception:
