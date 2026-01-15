@@ -190,7 +190,6 @@ while True:
         print("Interrumpido con Ctrl+C")
 
     finally:
-        pi.stop()
         GPIO.cleanup()
         print("GPIO liberado y pigpio detenido")
 
