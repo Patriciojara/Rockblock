@@ -75,7 +75,7 @@ def run_example():
                 
                 mensaje = "Da:{}, La: {}, Lo: {}".format(t, float(lat), lon)
 
-                ubicacion = subprocess.Popen(["python3", "envia_entrada.py", mensaje], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+                subprocess.Popen(["python3", "envia_entrada.py", mensaje], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
 
 
             sleep(1)
