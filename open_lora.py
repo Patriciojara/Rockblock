@@ -1,33 +1,23 @@
+import sys
 import pigpio
 import time
-import subprocess
+from subprocess import Popen
 #--------------------------- Lora-----------------------------------------------
 import serial
 import time
-import RPi.GPIO as GPIO
+#import RPi.GPIO as GPIO
 
 SERIAL_PORT = "/dev/serial0"
 BAUDRATE = 115200
 RESET_PIN = 4
 
-subprocess.run("sudo pigpiod", shell=True)
+#subprocess.run("sudo pigpiod", shell=True)
 
 # Parametro valvula
-# Iniciar conexión con el daemon pigpio
-pi = pigpio.pi()
-if not pi.connected:
-    print("Error: no se pudo conectar con el daemon pigpiod. ¿Está corriendo?")
-    exit(1)
-PIN_PWM = 12  # Puedes cambiar este pin
-frecuencia = 1
-duty_percent=100
-tiempo_seg=4
-duty = int((duty_percent / 100) * 255)
+
 # Fin Parametro valvula
 
 
-GPIO.setmode(GPIO.BCM)
-GPIO.setup(RESET_PIN, GPIO.OUT, initial=GPIO.HIGH)
 
 def reset_lora():
     GPIO.output(RESET_PIN, GPIO.LOW)
@@ -59,51 +49,38 @@ print("📡 Receptor LoRa-E5 iniciado...")
 reset_lora()
 
 def open(ser):
+    # Activamos Pin PWM desde archivo python
+    p = Popen([sys.executable, "pwm_gpio19.py"])
     # Configuramos Pin
-    PIN_PWM = 12  # Puedes cambiar este pin
-    frecuencia = 1
-    duty_percent=100
-    tiempo_seg=4
-    duty = int((duty_percent / 100) * 255)
+    
+    enviar_cmd(ser, f'AT+TEST=TXLRSTR,"{"Activando valvula..."}"', delay=2)
+    #time.sleep(tiempo_seg-2)
+    print("PWM detenido.")
 
     # Activamos Pin PWM
-    pi.set_mode(PIN_PWM, pigpio.OUTPUT)
-    pi.set_PWM_frequency(PIN_PWM, frecuencia)
-    pi.set_PWM_dutycycle(PIN_PWM, duty)
+    
 
     # Mandamos Mensaje de activacion por Lora
     time.sleep(2)
-    enviar_cmd(ser, f'AT+TEST=TXLRSTR,"{"Activando valvula..."}"', delay=2)
-    print(f"PWM activado en el pin {PIN_PWM} con {frecuencia} Hz y {duty_percent:.1f}% duty cycle.")
-    time.sleep(tiempo_seg-2)
-    pi.set_PWM_dutycycle(PIN_PWM, 0)
-    #pi.stop()
-    print("PWM detenido.")
-    
+    #print(f"PWM activado en el pin {PIN_PWM} con {frecuencia} Hz y {duty_percent:.1f}% duty cycle.")
+    #time.sleep(tiempo_seg-2)
     # Enviar ACK
     ack_msg = f"ACK: {'Valvula abierta 4s'}"
     enviar_cmd(ser, f'AT+TEST=TXLRSTR,"{ack_msg}"', delay=2)
     print("✅ ACK enviado:", ack_msg)
+    #pi.stop()
+    print("PWM detenido.")
+    
+
 
 def close(ser):
     # Configuramos Pin
-    PIN_PWM = 18  # Puedes cambiar este pin
-    frecuencia = 1
-    duty_percent=100
-    tiempo_seg=12
-    duty = int((duty_percent / 100) * 255)
-
-    # Activamos Pin PWM
-    pi.set_mode(PIN_PWM, pigpio.OUTPUT)
-    pi.set_PWM_frequency(PIN_PWM, frecuencia)
-    pi.set_PWM_dutycycle(PIN_PWM, duty)
-
+    p = Popen([sys.executable, "pwm_gpio12.py"])
     # Mandamos Mensaje de activacion por Lora
     time.sleep(2)
     enviar_cmd(ser, f'AT+TEST=TXLRSTR,"{"Cerrando valvula..."}"', delay=2)
-    print(f"PWM activado en el pin {PIN_PWM} con {frecuencia} Hz y {duty_percent:.1f}% duty cycle.")
-    time.sleep(tiempo_seg-2)
-    pi.set_PWM_dutycycle(PIN_PWM, 0)
+    #print(f"PWM activado en el pin {PIN_PWM} con {frecuencia} Hz y {duty_percent:.1f}% duty cycle.")
+    
     #pi.stop()
     print("PWM detenido.")
     
@@ -115,23 +92,11 @@ def close(ser):
 
 def up(ser):
     # Configuramos Pin
-    PIN_PWM = 19  # Puedes cambiar este pin
-    frecuencia = 1
-    duty_percent=100
-    tiempo_seg=6
-    duty = int((duty_percent / 100) * 255)
-
-    # Activamos Pin PWM
-    pi.set_mode(PIN_PWM, pigpio.OUTPUT)
-    pi.set_PWM_frequency(PIN_PWM, frecuencia)
-    pi.set_PWM_dutycycle(PIN_PWM, duty)
-
+    p = Popen([sys.executable, "pwm_gpio13.py"])
     # Mandamos Mensaje de activacion por Lora
     time.sleep(2)
     enviar_cmd(ser, f'AT+TEST=TXLRSTR,"{"Inyector Activo..."}"', delay=2)
-    print(f"PWM activado en el pin {PIN_PWM} con {frecuencia} Hz y {duty_percent:.1f}% duty cycle.")
-    time.sleep(tiempo_seg-2)
-    pi.set_PWM_dutycycle(PIN_PWM, 0)
+    
     #pi.stop()
     print("PWM detenido.")
     
