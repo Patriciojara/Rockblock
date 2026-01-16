@@ -22,7 +22,17 @@ i2c = busio.I2C(board.SCL, board.SDA) # Inicializa el bus I2C
 bme280 = Adafruit_BME280_I2C(i2c, address=0x76)# Crea el objeto del sensor en la dirección 0x76
 bme280.sea_level_pressure = 1013.25# Establece la presión a nivel del mar (opcional, para altitud)
 
+def rockblock_send(message):
+    print("Enviando mensaje por Rockblock...")
+    proceso = subprocess.Popen(["python3", "envia_entrada.py", message], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
 
+    # Mostrar salida en tiempo real
+    for line in proceso.stdout:
+        print(line, end='')
+
+    # Mostrar errores en tiempo real
+    for err in proceso.stderr:
+        print(err, end='')
 # Funciones para GPS:
 def run_example():
 
@@ -91,8 +101,8 @@ def run_example():
                 csvfile.flush()
 
                 mensaje = "Da:{}, La: {}, Lo: {}".format(time_rtc, float(lat), float(lon), float(altitud))
-
-                subprocess.Popen(["python3", "envia_entrada.py", mensaje], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+                rockblock_send(mensaje)
+                #subprocess.Popen(["python3", "envia_entrada.py", mensaje], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
 
 
             sleep(1)
