@@ -37,12 +37,7 @@ while True:
     altura = []
     hora = []
     for _ in range(ventana):
-        #t = rtc.datetime
-        #now = datetime.now()  # del sistema
-        
-        # time_rtc = f"{t.tm_hour}:{t.tm_min:02}:{t.tm_sec:02}" Hora del rtc
-        # time_rtc_ms = f"{t.tm_hour:02}:{t.tm_min:02}:{t.tm_sec:02}.{int(now.microsecond/1000):03d}" Falla ya que retrocede los milisegundos
-        
+  
         time_system = datetime.now().strftime("%H:%M:%S.%f")[:-3]
         hora.append(time_system)
         altura.append(bme280.altitude)
@@ -52,7 +47,7 @@ while True:
     print(np.mean(altura))
 
     print("Calculando velocidad de ascenso...")
-    t = pd.to_datetime(hora)
+    t = pd.to_datetime(hora, format='%H:%M:%S.%f')
     t_seg = (t - t[0]).total_seconds().to_numpy()
     m, b = np.polyfit(t_seg, altura, deg=1)
     print(f"Velocidad de ascenso: {m:.2f} m/s")
