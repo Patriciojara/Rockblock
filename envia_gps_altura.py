@@ -6,6 +6,8 @@ import csv
 import re
 import qwiic_titan_gps
 import subprocess
+import threading
+import queue
 
 
 import numpy as np
@@ -26,13 +28,32 @@ bme280.sea_level_pressure = 1013.25# Establece la presión a nivel del mar (opci
 current_proc = None
 
 def rockblock_send(message):
-    global current_proc
-    if current_proc is None or current_proc.poll() is not None:
-        current_proc = subprocess.Popen(["sudo","python3","envia_entrada.py", message],
-                                        stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-    else:
-        print("Envio en curso, salto este mensaje")
+    """Encola el mensaje para envío en background y retorna inmediatamente."""
+    send_queue.put(message)
 
+# Cola y worker para enviar en background (no bloquea la adquisición de datos)
+send_queue = queue.Queue()
+
+def sender_worker(q):
+    while True:
+        msg = q.get()
+        if msg is None:
+            break
+        try:
+            print(f"Worker: enviando mensaje: {msg}")
+            proc = subprocess.run(["sudo", "python3", "envia_entrada.py", msg], capture_output=True, text=True)
+            if proc.stdout:
+                print("envia_entrada stdout:\n", proc.stdout)
+            if proc.stderr:
+                print("envia_entrada stderr:\n", proc.stderr, file=sys.stderr)
+        except Exception as e:
+            print("Error en sender_worker:", e, file=sys.stderr)
+        finally:
+            q.task_done()
+
+# arrancar worker (daemon para que no impida el cierre)
+sender_thread = threading.Thread(target=sender_worker, args=(send_queue,), daemon=True)
+sender_thread.start()
 
 # Funciones para GPS:
 def run_example():
