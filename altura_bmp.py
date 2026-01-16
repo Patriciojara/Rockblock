@@ -2,11 +2,10 @@
 # Fecha: 18-10-2025
 # Descripción: lee bmp y abre valvula segun velocidad de altura
 
-print(
-"Importando librerias...")
+print("Importando librerias...")
 
 import subprocess
-import adafruit_ds3231
+#import adafruit_ds3231
 import numpy as np
 import time
 import board
@@ -16,8 +15,7 @@ import pandas as pd
 from datetime import datetime
 
 
-print(
-"Configurando sensores")
+print("Configurando sensores")
 # Inicializa el bus I2C
 i2c = busio.I2C(board.SCL, board.SDA)
 
@@ -27,17 +25,6 @@ bme280 = Adafruit_BME280_I2C(i2c, address=0x76)
 # Establece la presión a nivel del mar (opcional, para altitud)
 bme280.sea_level_pressure = 1013.25
 
-
-
-
-# ------------RTC------------------
-
-i2c_ds3231 = board.I2C()  # uses board.SCL and board.SDA ds3231
-# i2c = board.STEMMA_I2C()  # For using the built-in STEMMA QT connector on a microcontroller
-rtc = adafruit_ds3231.DS3231(i2c_ds3231)
-
-# Lookup table for names of days (nicer printing).
-days = ("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday")
 
 
 
