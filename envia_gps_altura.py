@@ -86,7 +86,7 @@ def run_example():
                 else:
                     time_str = str(time_gps)
 
-                print("Time_GPS, Time_RTC: {}, Latitude: {}, Longitude: {}, Altitude: {}".format(time_str, time_rtc,lat, lon, altitud))
+                print("Time_GPS{}, Time_RTC: {}, Latitude: {}, Longitude: {}, Altitude: {}".format(time_str, time_rtc, lat, lon, altitud))
                 writer.writerow([time_rtc, time_str, lat, lon, altitud])
                 csvfile.flush()
 
