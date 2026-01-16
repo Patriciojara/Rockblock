@@ -1,6 +1,7 @@
 import smbus
 import time
 import datetime
+import os
 
 # Dirección I2C del RTC DS3231
 RTC_ADDRESS = 0x68
