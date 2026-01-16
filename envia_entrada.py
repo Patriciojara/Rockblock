@@ -8,7 +8,7 @@ import sys
 from datetime import datetime
 
 # === CONFIGURACIÓN SERIAL ===
-PORT = '/dev/serial0'   # cambia si usas otro puerto
+PORT = '/dev/ttyS0'   # cambia si usas otro puerto
 BAUD = 19200
 
 # === FUNCIONES AUXILIARES ===
