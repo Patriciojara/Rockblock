@@ -1,44 +1,38 @@
-import smbus
+# SPDX-FileCopyrightText: 2021 ladyada for Adafruit Industries
+# SPDX-License-Identifier: MIT
+
+# Simple demo of reading and writing the time for the DS3231 real-time clock.
+# Change the if False to if True below to set the time, otherwise it will just
+# print the current date and time every second.  Notice also comments to adjust
+# for working with hardware vs. software I2C.
+
 import time
-import datetime
-import os
 
-# Dirección I2C del RTC DS3231
-RTC_ADDRESS = 0x68
+import board
 
-# Función para leer el valor de un registro del RTC
-def read_byte(reg):
-    bus = smbus.SMBus(1)
-    return bus.read_byte_data(RTC_ADDRESS, reg)
+import adafruit_ds3231
 
-# Función para convertir los valores de BCD a decimal
-def bcd_to_decimal(bcd):
-    return (bcd & 0xF) + ((bcd >> 4) * 10)
+i2c = board.I2C()  # uses board.SCL and board.SDA
+# i2c = board.STEMMA_I2C()  # For using the built-in STEMMA QT connector on a microcontroller
+rtc = adafruit_ds3231.DS3231(i2c)
 
-# Función para obtener la hora del RTC
-def read_time():
-    bus = smbus.SMBus(1)
-    
-    # Leer los registros del RTC (hora, minuto, segundo, día, mes, año)
-    second = bcd_to_decimal(read_byte(0x00))
-    minute = bcd_to_decimal(read_byte(0x01))
-    hour = bcd_to_decimal(read_byte(0x02))
-    day = bcd_to_decimal(read_byte(0x04))
-    month = bcd_to_decimal(read_byte(0x05))
-    year = bcd_to_decimal(read_byte(0x06)) + 2000
-    
-    # Crear un objeto datetime con la hora obtenida
-    rtc_time = datetime.datetime(year, month, day, hour, minute, second)
-    
-    return rtc_time
+# Lookup table for names of days (nicer printing).
+days = ("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday")
 
-# Función para sincronizar la hora del sistema con el RTC
-def sync_system_time():
-    rtc_time = read_time()
-    # Establecer la hora del sistema (usando el comando `sudo date`)
-    date_command = rtc_time.strftime("sudo date -s \"%Y-%m-%d %H:%M:%S\"")
-    os.system(date_command)
-    print(f"Hora sincronizada con el RTC: {rtc_time}")
 
-if __name__ == '__main__':
-    sync_system_time()
+if False:  # change to True if you want to set the time!
+    #                     year, mon, date, hour, min, sec, wday, yday, isdst
+    t = time.struct_time((2026, 12, 16, 14, 12, 15, 4, -1, -1))
+    # you must set year, mon, date, hour, min, sec and weekday
+    # yearday is not supported, isdst can be set but we don't do anything with it at this time
+    print("Setting time to:", t)  # uncomment for debugging
+    rtc.datetime = t
+    print()
+
+# Main loop:
+while True:
+    t = rtc.datetime
+    # print(t)     # uncomment for debugging
+    print(f"The date is {days[int(t.tm_wday)]} {t.tm_mday}/{t.tm_mon}/{t.tm_year}")
+    print(f"The time is {t.tm_hour}:{t.tm_min:02}:{t.tm_sec:02}")
+    time.sleep(1)  # wait a second
