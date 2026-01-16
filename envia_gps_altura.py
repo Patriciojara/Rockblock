@@ -24,7 +24,7 @@ bme280.sea_level_pressure = 1013.25# Establece la presión a nivel del mar (opci
 
 def rockblock_send(message):
     print("Enviando mensaje por Rockblock...")
-    proceso = subprocess.Popen(["python3", "envia_entrada.py", message], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+    proceso = subprocess.Popen(["sudo","python", "envia_entrada.py", message], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
 
     # Mostrar salida en tiempo real
     for line in proceso.stdout:
