@@ -103,7 +103,7 @@ def run_example():
                 continue
 
             if ok is True:
-                time_rtc = datetime.now().strftime("%H:%M:%S.%f")[:-3] # Hora de la raspberry
+                time_rtc = datetime.now().strftime("%H:%M:%S") # Hora de la raspberry (sin milisegundos)
                 # usar .get para evitar KeyError si faltan campos
                 lat = -qwiicGPS.gnss_messages.get('Latitude', 'N/A') # GPS
                 lon = -qwiicGPS.gnss_messages.get('Longitude', 'N/A') # GPS
@@ -122,7 +122,7 @@ def run_example():
                 writer.writerow([time_rtc, time_str, lat, lon, altitud])
                 csvfile.flush()
 
-                mensaje = "Da:{}, La: {}, Lo: {}".format(time_rtc, float(lat), float(lon), float(altitud))
+                mensaje = "Da:{}, La: {:.7f}, Lo: {:.7f}, al: {:.3f}".format(time_rtc, float(lat), float(lon), float(altitud))
                 rockblock_send(mensaje)
                 #subprocess.Popen(["python3", "envia_entrada.py", mensaje], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
 
