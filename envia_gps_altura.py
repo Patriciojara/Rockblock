@@ -31,6 +31,37 @@ def rockblock_send(message):
     """Encola el mensaje para envío en background y retorna inmediatamente."""
     send_queue.put(message)
 
+
+def rockblock_send_fast(message, timeout=20):
+    """Vacía la cola de envío y envía `message` inmediatamente (sin encolar).
+
+    - Borra cualquier mensaje pendiente en `send_queue`.
+    - Llama directamente a `envia_entrada.py` y muestra stdout/stderr.
+    Devuelve el objeto `subprocess.CompletedProcess` o `None` en caso de error/timeout.
+    """
+    # limpiar la cola para que solo el mensaje actual sea enviado
+    try:
+        while True:
+            item = send_queue.get_nowait()
+            send_queue.task_done()
+    except queue.Empty:
+        pass
+
+    try:
+        print(f"Fast send: {message}")
+        proc = subprocess.run(["sudo", "python3", "envia_entrada.py", message], capture_output=True, text=True, timeout=timeout)
+        if proc.stdout:
+            print("envia_entrada stdout:\n", proc.stdout)
+        if proc.stderr:
+            print("envia_entrada stderr:\n", proc.stderr, file=sys.stderr)
+        return proc
+    except subprocess.TimeoutExpired as e:
+        print(f"[!] Timeout en rockblock_send_fast: {e}", file=sys.stderr)
+        return None
+    except Exception as e:
+        print(f"[!] Error en rockblock_send_fast: {e}", file=sys.stderr)
+        return None
+
 # Cola y worker para enviar en background (no bloquea la adquisición de datos)
 send_queue = queue.Queue()
 
@@ -123,7 +154,7 @@ def run_example():
                 csvfile.flush()
 
                 mensaje = "Da:{}, La: {:.7f}, Lo: {:.7f}, al: {:.3f}".format(time_rtc, float(lat), float(lon), float(altitud))
-                rockblock_send(mensaje)
+                rockblock_send_fast(mensaje)
                 #subprocess.Popen(["python3", "envia_entrada.py", mensaje], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
 
 
