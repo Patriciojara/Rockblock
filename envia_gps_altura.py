@@ -90,6 +90,7 @@ def rockblock_send_fast_sin_queue(message, timeout=None):
 
         # Leer la salida en un hilo para no bloquear el loop principal
         def _reader(p: subprocess.Popen):
+            global current_proc
             try:
                 if timeout:
                     out, err = p.communicate(timeout=timeout)
