@@ -26,6 +26,7 @@ bme280.sea_level_pressure = 1013.25# Establece la presión a nivel del mar (opci
 
 
 current_proc = None
+current_proc_lock = threading.Lock()
 
 def rockblock_send(message):
     """Encola el mensaje para envío en background y retorna inmediatamente."""
@@ -60,6 +61,62 @@ def rockblock_send_fast(message, timeout=20):
         return None
     except Exception as e:
         print(f"[!] Error en rockblock_send_fast: {e}", file=sys.stderr)
+        return None
+
+
+def rockblock_send_fast_sin_queue(message, timeout=None):
+    """Lanza `envia_entrada.py` con Popen sólo si no hay un proceso activo.
+
+    - Si ya hay un proceso en ejecución, no hace nada y devuelve False.
+    - Si no hay proceso o ya terminó, inicia uno nuevo y lee su salida en
+      un hilo en background (no bloquea el bucle principal).
+    - Devuelve True si inició un proceso, False si se omitió, None en error.
+    """
+    global current_proc
+    try:
+        with current_proc_lock:
+            if current_proc is not None:
+                if current_proc.poll() is None:
+                    # El proceso todavía corre: no iniciar otro
+                    print("Envio en curso; omitiendo nuevo envío.")
+                    return False
+                else:
+                    # El proceso terminó: limpiar
+                    current_proc = None
+
+            print(f"Fast Popen send: {message}")
+            proc = subprocess.Popen(["sudo", "python3", "envia_entrada.py", message], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+            current_proc = proc
+
+        # Leer la salida en un hilo para no bloquear el loop principal
+        def _reader(p: subprocess.Popen):
+            try:
+                if timeout:
+                    out, err = p.communicate(timeout=timeout)
+                else:
+                    out, err = p.communicate()
+            except subprocess.TimeoutExpired:
+                try:
+                    p.kill()
+                except Exception:
+                    pass
+                out, err = p.communicate()
+                print("[!] Timeout leyendo proceso hijo", file=sys.stderr)
+
+            if out:
+                print("envia_entrada stdout:\n", out)
+            if err:
+                print("envia_entrada stderr:\n", err, file=sys.stderr)
+
+            with current_proc_lock:
+                if current_proc is p:
+                    current_proc = None
+
+        t = threading.Thread(target=_reader, args=(proc,), daemon=True)
+        t.start()
+        return True
+    except Exception as e:
+        print(f"[!] Error en rockblock_send_fast_sin_queue: {e}", file=sys.stderr)
         return None
 
 # Cola y worker para enviar en background (no bloquea la adquisición de datos)
@@ -154,7 +211,7 @@ def run_example():
                 csvfile.flush()
 
                 mensaje = "Da:{}, La: {:.7f}, Lo: {:.7f}, al: {:.3f}".format(time_rtc, float(lat), float(lon), float(altitud))
-                rockblock_send_fast(mensaje)
+                rockblock_send_fast_sin_queue(mensaje)
                 #subprocess.Popen(["python3", "envia_entrada.py", mensaje], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
 
 
