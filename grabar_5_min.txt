@@ -1,8 +1,3 @@
-rpicam-vid -t 0 \
-  --width 1920 --height 1080 \
-  --framerate 30 \
-  --bitrate 25000000 \
-  --profile high \
-  --segment 300000 \
-  -o grabaciones/$(date +"%Y-%m-%d_%H-%M-%S")/video_%04d.h264
-
+DIR="grabaciones/$(date +"%Y-%m-%d_%H-%M-%S")"
+mkdir -p "$DIR"
+rpicam-vid -t 0 --width 1920 --height 1080 --framerate 30 --bitrate 25000000 --profile high --segment 300000 -o "$DIR/video_%04d.h264"
