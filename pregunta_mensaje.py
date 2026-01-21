@@ -14,3 +14,4 @@ print("Respuesta:", response.decode())
 
 # Cerrar la conexión
 ser.close()
+
